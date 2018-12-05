@@ -147,7 +147,7 @@ def handle_message(event):
                     event.reply_token,TemplateSendMessage(
                         alt_text='猜題面板(手機限定)',
                         template=ButtonsTemplate(
-                            thumbnail_image_url='https://truth.bahamut.com.tw/s01/201709/e9c87c887640edf475d96f171eb8834f.PNG',
+                            thumbnail_image_url='logo.png',
                             title='題目',
                             text='狼、老虎和獅子誰玩遊戲一定會被淘汰?',
                             actions=[
@@ -172,7 +172,7 @@ def handle_message(event):
                     TemplateSendMessage(
                         alt_text='猜題面板(手機限定)',
                         template=ButtonsTemplate(
-                            thumbnail_image_url='https://truth.bahamut.com.tw/s01/201709/e9c87c887640edf475d96f171eb8834f.PNG',
+                            thumbnail_image_url='logo.png',
                             title='題目',
                             text='孔子有三位徒弟子貢、子路、和子游,請問哪一位不是人?',
                             actions=[
@@ -197,7 +197,7 @@ def handle_message(event):
                     TemplateSendMessage(
                         alt_text='猜題面板(手機限定)',
                         template=ButtonsTemplate(
-                            thumbnail_image_url='https://truth.bahamut.com.tw/s01/201709/e9c87c887640edf475d96f171eb8834f.PNG',
+                            thumbnail_image_url='logo.png',
                             title='題目',
                             text='獅子、狼、熊，哪一隻的牙齒最好?',
                             actions=[
@@ -222,7 +222,7 @@ def handle_message(event):
                     TemplateSendMessage(
                         alt_text='猜題面板(手機限定)',
                         template=ButtonsTemplate(
-                            thumbnail_image_url='https://truth.bahamut.com.tw/s01/201709/e9c87c887640edf475d96f171eb8834f.PNG',
+                            thumbnail_image_url='logo.png',
                             title='題目',
                             text='喵喵、吱吱 、旺旺誰會最先被叫起來背書?',
                             actions=[
@@ -247,7 +247,7 @@ def handle_message(event):
                     TemplateSendMessage(
                         alt_text='猜題面板(手機限定)',
                         template=ButtonsTemplate(
-                            thumbnail_image_url='https://truth.bahamut.com.tw/s01/201709/e9c87c887640edf475d96f171eb8834f.PNG',
+                            thumbnail_image_url='logo.png',
                             title='題目',
                             text='蝴蝶, 蜘蛛, 蜈蚣, 哪一個沒有領到酬勞?',
                             actions=[
