@@ -95,7 +95,7 @@ def handle_message(event):
                     actions=[
                         PostbackTemplateAction(
                             label='對',
-                            text='對'
+                            text='對',
                             data='0`t`'+event.message.text
                         ),
                         PostbackTemplateAction(
