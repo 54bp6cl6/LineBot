@@ -228,7 +228,7 @@ def Play(event,userlist,clientindex):
                         line_bot_api.push_message(user.ID, 
                             TextSendMessage(text=userlist[clientindex].Name+"繳交了"+event.message.text+"元給銀行"))
                 if userlist[clientindex].Balance - int(event.message.text) < 0:
-                    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="你破產了"))
+                    line_bot_api.push_message(event.source.user_id, TextSendMessage(text="你破產了"))
                     for user in userlist:
                         if user.Name != userlist[clientindex].Name:
                             line_bot_api.push_message(user.ID, 
