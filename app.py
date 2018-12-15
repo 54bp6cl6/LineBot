@@ -80,6 +80,38 @@ def Signup(user_id,name):
     }
     requests.get(url, params=payload)
 
+def Write(clientindex,data):
+    url = "https://script.google.com/macros/s/AKfycbyBbQ1lsq4GSoKE0yiU5d6x0z2EseeBNZVTewWlSZhQ6EVrizo/exec"
+    payload = {
+        'sheetUrl':"https://docs.google.com/spreadsheets/d/1PQsud7dyau5wrR5Eu26aW2O17zxysmVY8Ib69XUDnnQ/edit#gid=0",
+        'sheetTag':"users",
+        'data':data,
+        'x':str(clientindex+1),
+        'y':'3'
+    }
+    requests.get(url, params=payload)
+
+def Play(event,userlist,clientindex):
+    if event.message.text.find("重新開始") != -1:
+        for user in userlist:
+            Write(user.ID,"15000")
+            line_bot_api.push_message(user.ID, TextSendMessage(text=userlist[clientindex].name+"重啟了遊戲，你的存款變成了15000元"))
+    elif event.message.text.find("銀行轉帳") != -1:
+        temp = event.message.text.split(",")
+        try:
+            i = 0
+            for user in userlist:
+                if user.Name == temp[1]:
+                    user.Balance += int(temp[2])
+                    Write(i,user.Balance)
+                    for Ouser in userlist:
+                        if Ouser.ID != user.ID:
+                            line_bot_api.push_message(Ouser.ID, TextSendMessage(text=userlist[i].name+"向銀行索要了"+str(temp[2])+"元"))
+                i+=1
+        except Exception as e:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(e)))
+
+
 # 處理訊息
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
