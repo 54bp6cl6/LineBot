@@ -203,7 +203,7 @@ def handle_postback(event):
         elif data[1] == 'f':
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請再次輸入您的姓名"))
     ##取消
-    elif data[0] == '-1':
+    elif data[0] == '-1' and userlist[clientindex].Situation!="0":
         if userlist[clientindex].Situation!=0:
             Write(clientindex,str(userlist[clientindex].Step+1),'4')
             Write(clientindex,'0','5')
