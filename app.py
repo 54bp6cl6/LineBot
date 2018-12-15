@@ -127,7 +127,7 @@ def Play(event,userlist,clientindex):
                 TemplateSendMessage(
                     alt_text='匯款視窗',
                     template=ButtonsTemplate(
-                        thumbnail_image_url='https://github.com/54bp6cl6/LineBot/blob/Monopoly/image1.jpg',
+                        thumbnail_image_url='https://raw.githubusercontent.com/54bp6cl6/LineBot/Monopoly/image1.jpg',
                         title='匯款',
                         text='你要匯款給誰？',
                         actions=GetActions(event,userlist,clientindex)
