@@ -95,14 +95,16 @@ def Write(clientindex,data,index):
 
 def GetActions(event,userlist,clientindex):
     out = []
+    i=0
     for user in userlist:
         if user.ID != userlist[clientindex].ID:
             out.append(
                 PostbackTemplateAction(
                     label=user.Name,
-                    data='1`'+str(userlist[clientindex].Step)+"`"+user.Name
+                    data='1`'+str(userlist[clientindex].Step)+"`"+str(i)
                 )
             )
+        i+=1
     out.append(
         PostbackTemplateAction(
             label="取消",
@@ -194,11 +196,12 @@ def handle_postback(event):
     ##取消
     elif data[0] == '-1':
         Write(clientindex,str(userlist[clientindex].Step+1),'4')
+        Write(clientindex,'0','5')
     ##匯款
     elif data[0] == '1':
         if int(data[1]) == userlist[clientindex].Step:
             Write(clientindex,'1,'+data[2],'5')
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="要匯給"+data[2]+"多少錢"))
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="要匯給"+userlist[int(data[2])].Name+"多少錢"))
 
 
     
