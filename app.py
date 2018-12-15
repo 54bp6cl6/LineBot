@@ -35,10 +35,12 @@ def callback():
 
 #user類別
 class user:
-    def __init__(self,ID,Name,Balance):
+    def __init__(self,ID,Name,Balance,Situation,Step):
         self.Name = Name
         self.ID = ID
         self.Balance = int(Balance)
+        self.Situation = Situation
+        self.Step = int(Step)
 
 #讀取成員名單
 def GetUserList():
@@ -57,8 +59,8 @@ def GetUserList():
     i = 0
     while i < len(temp):
         if temp[i] != "":
-            userlist.append(user(temp[i],temp[i+1],temp[i+2]))
-            i+=3
+            userlist.append(user(temp[i],temp[i+1],temp[i+2],temp[i+3],temp[i+4]))
+            i+=5
         else:
             break
     return userlist
@@ -76,42 +78,59 @@ def Signup(user_id,name):
     payload = {
         'sheetUrl':"https://docs.google.com/spreadsheets/d/1PQsud7dyau5wrR5Eu26aW2O17zxysmVY8Ib69XUDnnQ/edit#gid=0",
         'sheetTag':"users",
-        'data':user_id+','+name+',15000'
+        'data':user_id+','+name+',15000,none,1'
     }
     requests.get(url, params=payload)
 
-def Write(clientindex,data):
+def Write(clientindex,data,item):
     url = "https://script.google.com/macros/s/AKfycbyBbQ1lsq4GSoKE0yiU5d6x0z2EseeBNZVTewWlSZhQ6EVrizo/exec"
     payload = {
         'sheetUrl':"https://docs.google.com/spreadsheets/d/1PQsud7dyau5wrR5Eu26aW2O17zxysmVY8Ib69XUDnnQ/edit#gid=0",
         'sheetTag':"users",
         'data':data,
         'x':str(clientindex+1),
-        'y':'3'
+        'y':str(item)
     }
     requests.get(url, params=payload)
 
+def GetActions(Step):
+    output = []
+    for user in userlist:
+        output.append(
+            PostbackTemplateAction(
+                label=user.Name,
+                data=str(Step)+","+user.Name
+            )
+        )
+    output.append(
+        PostbackTemplateAction(
+            label='取消',
+            text="本次交易取消了",
+            data="cancel"
+        )
+    )
+    return output
+
 def Play(event,userlist,clientindex):
-    if event.message.text.find("重新開始") != -1:
+    if event.message.text.find("restart") != -1:
         i = 0
         for user in userlist:
             Write(i,"15000")
             line_bot_api.push_message(user.ID, TextSendMessage(text=userlist[clientindex].Name+"重啟了遊戲，你的存款變成了15000元"))
             i+=1
-    elif event.message.text.find("銀行轉帳") != -1:
-        temp = event.message.text.split(",")
-        try:
-            i = 0
-            for user in userlist:
-                if user.Name == temp[1]:
-                    user.Balance += int(temp[2])
-                    Write(i,user.Balance)
-                    for Ouser in userlist:
-                        if Ouser.ID != user.ID:
-                            line_bot_api.push_message(Ouser.ID, TextSendMessage(text=userlist[i].Name+"向銀行索要了"+str(temp[2])+"元"))
-                i+=1
-        except Exception as e:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(e)))
+    elif event.message.text == "匯款":
+        line_bot_api.reply_message(event.reply_token, 
+            message = TemplateSendMessage(
+                alt_text='Buttons template',
+                template=ButtonsTemplate(
+                    thumbnail_image_url='https://example.com/image.jpg',
+                    title='Menu',
+                    text='Please select',
+                    actions=GetActions(userlist[clientindex].Step)
+                )
+            )
+        )
+        
 
 
 # 處理訊息
