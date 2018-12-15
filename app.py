@@ -140,7 +140,7 @@ def Play(event,userlist,clientindex):
             Write(clientindex,str(userlist[clientindex].Step+1),'4')
             Write(clientindex,'0`','5')
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="你取消了交易"))
-        else
+        else:
             try:
                 if event.message.text != '0':
                     int(event.message.text)
