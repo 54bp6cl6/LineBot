@@ -148,7 +148,7 @@ def Play(event,userlist,clientindex):
         elif event.message.text == "帳戶餘額":
             out = "----------------------"
             for user in userlist:
-                out += user.Name + ":" + user.Balance + "元\n"
+                out += user.Name + ":" + str(user.Balance) + "元\n"
             out += "----------------------"
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=out))
     #匯款
