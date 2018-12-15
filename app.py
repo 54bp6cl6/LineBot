@@ -93,14 +93,14 @@ def Write(clientindex,data,index):
     }
     requests.get(url, params=payload)
 
-def GetActions(event,userlist,clientindex,Step):
+def GetActions(event,userlist,clientindex):
     out = []
     for user in userlist:
         if user.ID != userlist[clientindex].ID:
             out.append(
                 PostbackTemplateAction(
                     label=user.Name,
-                    data='1`'+str(Step)+"`"+user.Name
+                    data='1`'+str(userlist[clientindex].Step)+"`"+user.Name
                 )
             )
     out.append(
@@ -128,7 +128,7 @@ def Play(event,userlist,clientindex):
                         thumbnail_image_url='https://example.com/image.jpg',
                         title='匯款',
                         text='你要匯款給誰？',
-                        actions=GetActions(event,userlist,clientindex,userlist[clientindex].Step)
+                        actions=GetActions(event,userlist,clientindex)
                     )
                 )
             )
@@ -196,7 +196,7 @@ def handle_postback(event):
         Write(clientindex,str(userlist[clientindex].Step+1),'4')
     ##匯款
     elif data[0] == '1':
-        if data[1] == userlist[clientindex].Step:
+        if int(data[1]) == userlist[clientindex].Step:
             Write(clientindex,'1,'+data[2],'5')
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="要匯給"+data[2]+"多少錢"))
 
