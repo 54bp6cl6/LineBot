@@ -145,6 +145,12 @@ def Play(event,userlist,clientindex):
         elif event.message.text == "付錢":
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="你要繳交多少錢？"))
             Write(clientindex,'3','5')
+        elif event.message.text == "帳戶餘額":
+            out = "----------------------"
+            for user in userlist:
+                out += user.Name + ":" + user.Balance + "元\n"
+            out += "----------------------"
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=out))
     #匯款
     elif temp[0] == '1':
         try:
