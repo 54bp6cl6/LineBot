@@ -181,7 +181,7 @@ def Play(event,userlist,clientindex):
         except:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text='輸入錯誤，請輸入數字，\n並注意不要包含任何空格\n若要取消，請輸入\"取消\"'))
     #付錢
-elif temp[0] == '3':
+    elif temp[0] == '3':
         try:
             if event.message.text != '0':
                 int(event.message.text)
