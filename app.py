@@ -35,11 +35,12 @@ def callback():
 
 #user類別
 class user:
-    def __init__(self,ID,Name,Balance,Step):
+    def __init__(self,ID,Name,Balance,Step,Situation):
         self.Name = Name
         self.ID = ID
         self.Balance = int(Balance)
         self.Step = int(Step)
+        self.Situation = Situation
 
 #讀取成員名單
 def GetUserList():
@@ -58,8 +59,8 @@ def GetUserList():
     i = 0
     while i < len(temp):
         if temp[i] != "":
-            userlist.append(user(temp[i],temp[i+1],temp[i+2],temp[i+3]))
-            i+=4
+            userlist.append(user(temp[i],temp[i+1],temp[i+2],temp[i+3],temp[i+4]))
+            i+=5
         else:
             break
     return userlist
@@ -88,7 +89,7 @@ def Write(clientindex,data,index):
         'sheetTag':"users",
         'data':data,
         'x':str(clientindex+1),
-        'y':str(index)
+        'y':index
     }
     requests.get(url, params=payload)
 
@@ -111,24 +112,41 @@ def GetActions(event,userlist,clientindex,Step):
     return out
 
 def Play(event,userlist,clientindex):
-    if event.message.text.find("restart") != -1:
-        i = 0
-        for user in userlist:
-            Write(i,"15000")
-            line_bot_api.push_message(user.ID, TextSendMessage(text=userlist[clientindex].Name+"重啟了遊戲，你的存款變成了15000元"))
-            i+=1
-    elif event.message.text== "匯款":
-        line_bot_api.reply_message(event.reply_token, 
-            TemplateSendMessage(
-                alt_text='匯款視窗',
-                template=ButtonsTemplate(
-                    thumbnail_image_url='https://example.com/image.jpg',
-                    title='匯款',
-                    text='你要匯款給誰？',
-                    actions=GetActions(event,userlist,clientindex,userlist[clientindex].Step)
+    temp = userlist[clientindex].Situation.split(',')
+    if temp[0] == '0':
+        if event.message.text.find("restart") != -1:
+            i = 0
+            for user in userlist:
+                Write(i,"15000",'3')
+                line_bot_api.push_message(user.ID, TextSendMessage(text=userlist[clientindex].Name+"重啟了遊戲，你的存款變成了15000元"))
+                i+=1
+        elif event.message.text== "匯款":
+            line_bot_api.reply_message(event.reply_token, 
+                TemplateSendMessage(
+                    alt_text='匯款視窗',
+                    template=ButtonsTemplate(
+                        thumbnail_image_url='https://example.com/image.jpg',
+                        title='匯款',
+                        text='你要匯款給誰？',
+                        actions=GetActions(event,userlist,clientindex,userlist[clientindex].Step)
+                    )
                 )
             )
-        )
+    elif temp[0] == '1':
+        try:
+            int(event.message.text)
+            Write(clientindex,str(userlist[clientindex].Step + 1),'4')
+            Write(clientindex,str(userlist[clientindex].Balance - int(event.message.text)),'3')
+            i=0
+            for user in userlist:
+                if user.Name == temp[1]:
+                    Write(i,str(userlist.Balance + int(event.message.text)),'3')
+                    break
+                i+=1
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="你匯給了"+temp[1]+event.message.text+"元"))
+        except:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text='輸入錯誤，請輸入數字，並注意不要包含任何空格'))
+
 
 
 # 處理訊息
@@ -173,6 +191,16 @@ def handle_postback(event):
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="註冊成功，努力成為大富翁吧!!"))
         elif data[1] == 'f':
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請再次輸入您的姓名"))
+    ##取消
+    elif data[0] == '-1':
+        Write(clientindex,str(userlist[clientindex].Step+1),'4')
+    ##匯款
+    elif data[0] == '1':
+        if data[1] == userlist[clientindex].Step:
+            Write(clientindex,'1,'+data[2],'5')
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="要匯給"+data[2]+"多少錢"))
+
+
     
 @handler.add(FollowEvent)
 def handle_follow(event):
