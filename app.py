@@ -35,38 +35,34 @@ def callback():
 
 #user類別
 class user:
-    def __init__(self,ID,Name,Balance,Situation,Step):
+    def __init__(self,ID,Name,Balance,Step):
         self.Name = Name
         self.ID = ID
         self.Balance = int(Balance)
-        self.Situation = Situation
         self.Step = int(Step)
 
 #讀取成員名單
 def GetUserList():
-    try:
-        url = "https://script.google.com/macros/s/AKfycbwVs2Si91yKz6m3utpaPtsttbh_lUQ8LOQM3Zud2hPFxXCgW3u1/exec"
-        payload = {
-            'sheetUrl':"https://docs.google.com/spreadsheets/d/1PQsud7dyau5wrR5Eu26aW2O17zxysmVY8Ib69XUDnnQ/edit#gid=0",
-            'sheetTag':"users",
-            'row': 1,
-            'col': 1,
-            'endRow' : 51,
-            'endCol' : 20
-        }
-        resp = requests.get(url, params=payload)
-        temp = resp.text.split(',')
-        userlist = []
-        i = 0
-        while i < len(temp):
-            if temp[i] != "":
-                userlist.append(user(temp[i],temp[i+1],temp[i+2],temp[i+3],temp[i+4]))
-                i+=5
-            else:
-                break
-        return userlist
-    except Exception as e:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(e)+"\n in GetUserList()"))
+    url = "https://script.google.com/macros/s/AKfycbwVs2Si91yKz6m3utpaPtsttbh_lUQ8LOQM3Zud2hPFxXCgW3u1/exec"
+    payload = {
+        'sheetUrl':"https://docs.google.com/spreadsheets/d/1PQsud7dyau5wrR5Eu26aW2O17zxysmVY8Ib69XUDnnQ/edit#gid=0",
+        'sheetTag':"users",
+        'row': 1,
+        'col': 1,
+        'endRow' : 51,
+        'endCol' : 20
+    }
+    resp = requests.get(url, params=payload)
+    temp = resp.text.split(',')
+    userlist = []
+    i = 0
+    while i < len(temp):
+        if temp[i] != "":
+            userlist.append(user(temp[i],temp[i+1],temp[i+2],temp[i+3]))
+            i+=4
+        else:
+            break
+    return userlist
 
 #登入
 def Login(user_id,userlist):
@@ -81,68 +77,58 @@ def Signup(user_id,name):
     payload = {
         'sheetUrl':"https://docs.google.com/spreadsheets/d/1PQsud7dyau5wrR5Eu26aW2O17zxysmVY8Ib69XUDnnQ/edit#gid=0",
         'sheetTag':"users",
-        'data':user_id+','+name+',15000,none,1'
+        'data':user_id+','+name+',15000,1'
     }
     requests.get(url, params=payload)
 
-def Write(clientindex,data,item):
-    try:
-        url = "https://script.google.com/macros/s/AKfycbyBbQ1lsq4GSoKE0yiU5d6x0z2EseeBNZVTewWlSZhQ6EVrizo/exec"
-        payload = {
-            'sheetUrl':"https://docs.google.com/spreadsheets/d/1PQsud7dyau5wrR5Eu26aW2O17zxysmVY8Ib69XUDnnQ/edit#gid=0",
-            'sheetTag':"users",
-            'data':data,
-            'x':str(clientindex+1),
-            'y':str(item)
-        }
-        requests.get(url, params=payload)
-    except Exception as e:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(e)+"\n in Write()"))
+def Write(clientindex,data,index):
+    url = "https://script.google.com/macros/s/AKfycbyBbQ1lsq4GSoKE0yiU5d6x0z2EseeBNZVTewWlSZhQ6EVrizo/exec"
+    payload = {
+        'sheetUrl':"https://docs.google.com/spreadsheets/d/1PQsud7dyau5wrR5Eu26aW2O17zxysmVY8Ib69XUDnnQ/edit#gid=0",
+        'sheetTag':"users",
+        'data':data,
+        'x':str(clientindex+1),
+        'y':str(index)
+    }
+    requests.get(url, params=payload)
 
-def GetActions(Step):
-    try:
-        output = []
-        for user in userlist:
-            output.append(
+def GetActions(event,userlist,clientindex,Step):
+    out = []
+    for user in userlist:
+        if user.ID != userlist[clientindex].ID:
+            out.append(
                 PostbackTemplateAction(
                     label=user.Name,
-                    data=str(Step)+","+user.Name
+                    data='1`'+str(Step)+"`"+user.Name
                 )
             )
-        output.append(
-            PostbackTemplateAction(
-                label='取消',
-                text="本次交易取消了",
-                data="cancel"
-            )
+    out.append(
+        PostbackTemplateAction(
+            label="取消",
+            data='-1`'
         )
-        return output
-    except Exception as e:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(e)+"\n in GetActions()"))
+    )
+    return out
 
 def Play(event,userlist,clientindex):
-    try:
-        if event.message.text.find("restart") != -1:
-            i = 0
-            for user in userlist:
-                Write(i,"15000")
-                line_bot_api.push_message(user.ID, TextSendMessage(text=userlist[clientindex].Name+"重啟了遊戲，你的存款變成了15000元"))
-                i+=1
-        elif event.message.text == "匯款":
-            line_bot_api.reply_message(event.reply_token, 
-                message = TemplateSendMessage(
-                    alt_text='Buttons template',
-                    template=ButtonsTemplate(
-                        thumbnail_image_url='https://example.com/image.jpg',
-                        title='Menu',
-                        text='Please select',
-                        actions=GetActions(userlist[clientindex].Step)
-                    )
+    if event.message.text.find("restart") != -1:
+        i = 0
+        for user in userlist:
+            Write(i,"15000")
+            line_bot_api.push_message(user.ID, TextSendMessage(text=userlist[clientindex].Name+"重啟了遊戲，你的存款變成了15000元"))
+            i+=1
+    elif event.message.text== "匯款":
+        line_bot_api.reply_message(event.reply_token, 
+            TemplateSendMessage(
+                alt_text='匯款視窗',
+                template=ButtonsTemplate(
+                    thumbnail_image_url='https://example.com/image.jpg',
+                    title='匯款',
+                    text='你要匯款給誰？',
+                    actions=GetActions(event,userlist,clientindex,userlist[clientindex].Step)
                 )
             )
-    except Exception as e:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(e)+"\n in Play()"))
-        
+        )
 
 
 # 處理訊息
@@ -173,7 +159,7 @@ def handle_message(event):
             )
             line_bot_api.reply_message(event.reply_token, message)
     except Exception as e:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(e)+"\n in handle_message()"))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(e)))
     
 @handler.add(PostbackEvent)
 def handle_postback(event):
