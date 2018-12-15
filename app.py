@@ -103,7 +103,7 @@ def GetColumns(event,userlist,clientindex):
                 CarouselColumn(
                     thumbnail_image_url='https://raw.githubusercontent.com/54bp6cl6/LineBot/Monopoly/image1.jpg',
                     title="匯款給 "+user.Name,
-                    text="賄款給"+user.Name+"？",
+                    text="匯款給"+user.Name+"？",
                     actions=[
                         PostbackTemplateAction(
                         label="確定",
