@@ -137,10 +137,11 @@ def Play(event,userlist,clientindex):
             int(event.message.text)
             Write(clientindex,str(userlist[clientindex].Step + 1),'4')
             Write(clientindex,str(userlist[clientindex].Balance - int(event.message.text)),'3')
+            Write(clientindex,'0','5')
             i=0
             for user in userlist:
                 if user.Name == temp[1]:
-                    Write(i,str(userlist.Balance + int(event.message.text)),'3')
+                    Write(i,str(userlist[i].Balance + int(event.message.text)),'3')
                     break
                 i+=1
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="你匯給了"+temp[1]+event.message.text+"元"))
