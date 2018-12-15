@@ -167,7 +167,7 @@ def Play(event,userlist,clientindex):
             out += "----------------------------------"
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=out))
         elif event.message.text[0:3] == "作弊,":
-            data = event.message.text.split(','):
+            data = event.message.text.split(',')
             for user in userlist:
                 if user.Name == data[1]:
                     line_bot_api.reply_message(event.reply_token, TextSendMessage(text="作弊："+user.Name+"加"+data[2]+"元"))
