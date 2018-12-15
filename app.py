@@ -171,6 +171,7 @@ def Play(event,userlist,clientindex):
             for user in userlist:
                 if user.Name == data[1]:
                     line_bot_api.reply_message(event.reply_token, TextSendMessage(text="作弊："+user.Name+"加"+data[2]+"元"))
+                    line_bot_api.push_message(user.ID, TextSendMessage(text="系統管理員將你的餘額加了"+data[2]+"元"))
                     Write(userlist.index(user),str(user.Balance + int(data[2])),'3')
     #匯款
     elif temp[0] == '1':
