@@ -95,16 +95,14 @@ def Write(clientindex,data,index):
 
 def GetActions(event,userlist,clientindex):
     out = []
-    i=0
     for user in userlist:
         if user.ID != userlist[clientindex].ID:
             out.append(
                 PostbackTemplateAction(
                     label=user.Name,
-                    data='1`'+str(userlist[clientindex].Step)+"`"+str(i)
+                    data='1`'+str(userlist[clientindex].Step)+"`"+user.Name
                 )
             )
-        i+=1
     out.append(
         PostbackTemplateAction(
             label="取消",
