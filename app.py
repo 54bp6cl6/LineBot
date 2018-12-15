@@ -122,12 +122,12 @@ def Play(event,userlist,clientindex):
                 Write(i,"0",'5')
                 line_bot_api.push_message(user.ID, TextSendMessage(text=userlist[clientindex].Name+"重啟了遊戲，你的存款變成了15000元"))
                 i+=1
-        elif event.message.text== "匯款":
+        elif event.message.text == "匯款":
             line_bot_api.reply_message(event.reply_token, 
                 TemplateSendMessage(
                     alt_text='匯款視窗',
                     template=ButtonsTemplate(
-                        thumbnail_image_url='https://github.com/54bp6cl6/LineBot/blob/Monopoly/%%E5%8C%%AF%%E6%%AC%%BE.jpg',
+                        thumbnail_image_url='https://github.com/54bp6cl6/LineBot/blob/Monopoly/image1.jpg',
                         title='匯款',
                         text='你要匯款給誰？',
                         actions=GetActions(event,userlist,clientindex)
