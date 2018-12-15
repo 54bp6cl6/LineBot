@@ -82,6 +82,7 @@ def Signup(user_id,name):
     }
     requests.get(url, params=payload)
 
+#寫入資料
 def Write(clientindex,data,index):
     url = "https://script.google.com/macros/s/AKfycbyBbQ1lsq4GSoKE0yiU5d6x0z2EseeBNZVTewWlSZhQ6EVrizo/exec"
     payload = {
@@ -93,20 +94,33 @@ def Write(clientindex,data,index):
     }
     requests.get(url, params=payload)
 
-def GetActions(event,userlist,clientindex):
+#取得版型
+def GetColumns(event,userlist,clientindex):
     out = []
     for user in userlist:
         if user.ID != userlist[clientindex].ID:
             out.append(
-                PostbackTemplateAction(
-                    label=user.Name,
-                    data='1`'+str(userlist[clientindex].Step + 1)+"`"+user.Name
+                CarouselColumn(
+                    
+                    actions=[
+                        PostbackTemplateAction(
+                        label="確定",
+                        data='1`'+str(userlist[clientindex].Step + 1)+"`"+user.Name
+                        )
+                    ]
                 )
             )
     out.append(
-        PostbackTemplateAction(
-            label="取消",
-            data='-1`'
+        CarouselColumn(
+            thumbnail_image_url='https://raw.githubusercontent.com/54bp6cl6/LineBot/Monopoly/image1.jpg',
+            title="取消",
+            text="取消這次交易",
+            actions=[
+                PostbackTemplateAction(
+                    label="確定",
+                    data='-1`'
+                )
+            ]
         )
     )
     return out
@@ -129,12 +143,9 @@ def Play(event,userlist,clientindex):
         elif event.message.text == "匯款":
             line_bot_api.reply_message(event.reply_token, 
                 TemplateSendMessage(
-                    alt_text='匯款視窗',
-                    template=ButtonsTemplate(
-                        thumbnail_image_url='https://raw.githubusercontent.com/54bp6cl6/LineBot/Monopoly/image1.jpg',
-                        title='匯款',
-                        text='你要匯款給誰？',
-                        actions=GetActions(event,userlist,clientindex)
+                    alt_text='請選擇匯款對象',
+                    template=CarouselTemplate(
+                        columns=GetColumns(event,userlist,clientindex)
                     )
                 )
             )
