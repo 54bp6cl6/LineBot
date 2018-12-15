@@ -96,7 +96,7 @@ def Play(event,userlist,clientindex):
         i = 0
         for user in userlist:
             Write(i,"15000")
-            line_bot_api.push_message(user.ID, TextSendMessage(text=userlist[clientindex].name+"重啟了遊戲，你的存款變成了15000元"))
+            line_bot_api.push_message(user.ID, TextSendMessage(text=userlist[clientindex].Name+"重啟了遊戲，你的存款變成了15000元"))
             i+=1
     elif event.message.text.find("銀行轉帳") != -1:
         temp = event.message.text.split(",")
@@ -108,7 +108,7 @@ def Play(event,userlist,clientindex):
                     Write(i,user.Balance)
                     for Ouser in userlist:
                         if Ouser.ID != user.ID:
-                            line_bot_api.push_message(Ouser.ID, TextSendMessage(text=userlist[i].name+"向銀行索要了"+str(temp[2])+"元"))
+                            line_bot_api.push_message(Ouser.ID, TextSendMessage(text=userlist[i].Name+"向銀行索要了"+str(temp[2])+"元"))
                 i+=1
         except Exception as e:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(e)))
