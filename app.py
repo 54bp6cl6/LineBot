@@ -127,7 +127,7 @@ def Play(event,userlist,clientindex):
                 TemplateSendMessage(
                     alt_text='匯款視窗',
                     template=ButtonsTemplate(
-                        thumbnail_image_url='https://example.com/image.jpg',
+                        thumbnail_image_url='https://github.com/54bp6cl6/LineBot/blob/Monopoly/%%E5%8C%%AF%%E6%%AC%%BE.jpg',
                         title='匯款',
                         text='你要匯款給誰？',
                         actions=GetActions(event,userlist,clientindex)
@@ -138,7 +138,7 @@ def Play(event,userlist,clientindex):
     elif temp[0] == '1':
         if event.message.text.find("取消") != -1:
             Write(clientindex,str(userlist[clientindex].Step+1),'4')
-            Write(clientindex,'0`','5')
+            Write(clientindex,'0','5')
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="你取消了交易"))
         else:
             try:
@@ -206,7 +206,7 @@ def handle_postback(event):
     elif data[0] == '-1':
         if userlist[clientindex].Situation!=0:
             Write(clientindex,str(userlist[clientindex].Step+1),'4')
-            Write(clientindex,'0`','5')
+            Write(clientindex,'0','5')
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="你取消了交易"))
     ##匯款
     elif data[0] == '1':
