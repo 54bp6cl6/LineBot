@@ -119,8 +119,8 @@ def handle_message(event):
         userlist = GetUserList()
         clientindex = Login(event.source.user_id,userlist)
         if clientindex > -1:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=userlist[clientindex].Name))
             #開始使用功能
+            Play(event,userlist,clientindex)
         else:
             message = TemplateSendMessage(
                 alt_text='註冊面板',
