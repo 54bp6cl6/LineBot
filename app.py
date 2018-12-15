@@ -100,7 +100,7 @@ def GetActions(event,userlist,clientindex):
             out.append(
                 PostbackTemplateAction(
                     label=user.Name,
-                    data='1`'+str(userlist[clientindex].Step)+"`"+user.Name
+                    data='1`'+str(userlist[clientindex].Step + 1)+"`"+user.Name
                 )
             )
     out.append(
@@ -121,7 +121,6 @@ def Play(event,userlist,clientindex):
                 line_bot_api.push_message(user.ID, TextSendMessage(text=userlist[clientindex].Name+"重啟了遊戲，你的存款變成了15000元"))
                 i+=1
         elif event.message.text== "匯款":
-            Write(clientindex,str(userlist[clientindex].Step+1),4)
             line_bot_api.reply_message(event.reply_token, 
                 TemplateSendMessage(
                     alt_text='匯款視窗',
@@ -133,6 +132,7 @@ def Play(event,userlist,clientindex):
                     )
                 )
             )
+            Write(clientindex,str(userlist[clientindex].Step+1),4)
     elif temp[0] == '1':
         try:
             int(event.message.text)
