@@ -78,7 +78,7 @@ def Signup(user_id,name):
     payload = {
         'sheetUrl':"https://docs.google.com/spreadsheets/d/1PQsud7dyau5wrR5Eu26aW2O17zxysmVY8Ib69XUDnnQ/edit#gid=0",
         'sheetTag':"users",
-        'data':user_id+','+name+',15000,1'
+        'data':user_id+','+name+',15000,1,0'
     }
     requests.get(url, params=payload)
 
@@ -101,7 +101,9 @@ def GetColumns(event,userlist,clientindex):
         if user.ID != userlist[clientindex].ID:
             out.append(
                 CarouselColumn(
-                    
+                    thumbnail_image_url='https://raw.githubusercontent.com/54bp6cl6/LineBot/Monopoly/image1.jpg',
+                    title="匯款給 "+user.Name,
+                    text="賄款給"+user.Name+"？",
                     actions=[
                         PostbackTemplateAction(
                         label="確定",
