@@ -93,9 +93,11 @@ def Write(clientindex,data):
 
 def Play(event,userlist,clientindex):
     if event.message.text.find("重新開始") != -1:
+        i = 0
         for user in userlist:
-            Write(user.ID,"15000")
+            Write(i,"15000")
             line_bot_api.push_message(user.ID, TextSendMessage(text=userlist[clientindex].name+"重啟了遊戲，你的存款變成了15000元"))
+            i+=1
     elif event.message.text.find("銀行轉帳") != -1:
         temp = event.message.text.split(",")
         try:
