@@ -135,7 +135,7 @@ def Play(event,userlist,clientindex):
             Write(clientindex,str(userlist[clientindex].Step+1),4)
     elif temp[0] == '1':
         try:
-            if message.event.text != '0'
+            if message.event.text != '0':
                 int(event.message.text)
                 Write(clientindex,str(userlist[clientindex].Step + 1),'4')
                 Write(clientindex,str(userlist[clientindex].Balance - int(event.message.text)),'3')
