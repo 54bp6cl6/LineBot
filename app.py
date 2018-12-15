@@ -161,11 +161,17 @@ def Play(event,userlist,clientindex):
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="你要繳交多少錢？"))
             Write(clientindex,'3','5')
         elif event.message.text == "帳戶餘額":
-            out = "----------------------\n"
+            out = "----------------------------------\n"
             for user in userlist:
                 out += user.Name + ":" + str(user.Balance) + "元\n"
-            out += "----------------------"
+            out += "----------------------------------"
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=out))
+        elif event.message.text[0:3] == "作弊,":
+            data = event.message.text.split(','):
+            for user in userlist:
+                if user.Name == data[1]:
+                    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="作弊："+user.Name+"加"+data[2]+"元"))
+                    Write(userlist.index(user),str(user.Balance + int(data[2])),'3')
     #匯款
     elif temp[0] == '1':
         try:
