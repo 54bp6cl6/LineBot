@@ -130,17 +130,19 @@ def GetColumns(event,userlist,clientindex):
 def Play(event,userlist,clientindex):
     temp = userlist[clientindex].Situation.split('`')
     if event.message.text.find("取消") != -1 and temp[0] != '0':
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="你取消了交易"))
         Write(clientindex,str(userlist[clientindex].Step+1),'4')
         Write(clientindex,'0','5')
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="你取消了交易"))
     elif temp[0] == '0':
         if event.message.text.find("restart") != -1:
+            for user in userlist:
+                line_bot_api.push_message(user.ID, 
+                    TextSendMessage(text=userlist[clientindex].Name+"重啟了遊戲，\n你的存款變成了15000元"))
             i = 0
             for user in userlist:
                 Write(i,"15000",'3')
                 Write(i,"1",'4')
                 Write(i,"0",'5')
-                line_bot_api.push_message(user.ID, TextSendMessage(text=userlist[clientindex].Name+"重啟了遊戲，你的存款變成了15000元"))
                 i+=1
         elif event.message.text == "匯款":
             line_bot_api.reply_message(event.reply_token, 
@@ -167,53 +169,71 @@ def Play(event,userlist,clientindex):
     #匯款
     elif temp[0] == '1':
         try:
-            if event.message.text != '0':
-                int(event.message.text)
-                Write(clientindex,str(userlist[clientindex].Step + 1),'4')
-                Write(clientindex,str(userlist[clientindex].Balance - int(event.message.text)),'3')
-                Write(clientindex,'0','5')
-                i=0
-                for user in userlist:
-                    if user.Name == temp[1]:
-                        Write(i,str(userlist[i].Balance + int(event.message.text)),'3')
-                        line_bot_api.push_message(user.ID, TextSendMessage(text=userlist[clientindex].Name+"匯給你"+event.message.text+"元"))
-                        break
-                    i+=1
-                line_bot_api.reply_message(event.reply_token, TextSendMessage(text="你匯給了"+temp[1]+event.message.text+"元"))
+            if int(event.message.text) > 0:
+                if int(event.message.text) <= userlist[clientindex].Balance:
+                    line_bot_api.reply_message(event.reply_token, 
+                        TextSendMessage(text="你匯給了"+temp[1]+event.message.text+"元"))
+                    i=0
+                    for user in userlist:
+                        if user.Name == temp[1]:
+                            Write(i,str(userlist[i].Balance + int(event.message.text)),'3')
+                            line_bot_api.push_message(user.ID, 
+                                TextSendMessage(text=userlist[clientindex].Name+"匯給你"+event.message.text+"元"))
+                            break
+                        i+=1
+                    Write(clientindex,str(userlist[clientindex].Step + 1),'4')
+                    Write(clientindex,str(userlist[clientindex].Balance - int(event.message.text)),'3')
+                    Write(clientindex,'0','5')
+                else:
+                    line_bot_api.reply_message(event.reply_token, 
+                        TextSendMessage(text="匯款金額超過你的餘額("+str(userlist[clientindex].Balance)+")，請重新輸入"))
             else:
-                line_bot_api.reply_message(event.reply_token, TextSendMessage(text="不能匯0元啦!!!"))
+                line_bot_api.reply_message(event.reply_token, 
+                    TextSendMessage(text="匯款金額低於限制，請重新輸入"))
         except:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text='輸入錯誤，請輸入數字，\n並注意不要包含任何空格\n若要取消，請輸入\"取消\"'))
+            line_bot_api.reply_message(event.reply_token, 
+                TextSendMessage(text='輸入錯誤，請輸入數字，\n並注意不要包含任何空格\n若要取消，請輸入\"取消\"'))
     #領錢
     elif temp[0] == '2':
         try:
-            if event.message.text != '0':
-                int(event.message.text)
-                Write(clientindex,str(userlist[clientindex].Balance + int(event.message.text)),'3')
-                Write(clientindex,'0','5')
+            if int(event.message.text) > 0:
+                line_bot_api.reply_message(event.reply_token, 
+                    TextSendMessage(text="你向銀行請領了"+event.message.text+"元"))
                 for user in userlist:
                     if user.Name != userlist[clientindex].Name:
-                        line_bot_api.push_message(user.ID, TextSendMessage(text=userlist[clientindex].Name+"向銀行請領了"+event.message.text+"元"))
-                line_bot_api.reply_message(event.reply_token, TextSendMessage(text="你向銀行請領了"+event.message.text+"元"))
+                        line_bot_api.push_message(user.ID, 
+                            TextSendMessage(text=userlist[clientindex].Name+"向銀行請領了"+event.message.text+"元"))
+                Write(clientindex,str(userlist[clientindex].Balance + int(event.message.text)),'3')
+                Write(clientindex,'0','5')
             else:
-                line_bot_api.reply_message(event.reply_token, TextSendMessage(text="沒有人在請領0元的啦!!!"))
+                line_bot_api.reply_message(event.reply_token, TextSendMessage(text="輸入金額錯誤"))
         except:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text='輸入錯誤，請輸入數字，\n並注意不要包含任何空格\n若要取消，請輸入\"取消\"'))
+            line_bot_api.reply_message(event.reply_token, 
+                TextSendMessage(text='輸入錯誤，請輸入數字，\n並注意不要包含任何空格\n若要取消，請輸入\"取消\"'))
     #付錢
     elif temp[0] == '3':
         try:
-            if event.message.text != '0':
-                int(event.message.text)
-                Write(clientindex,str(userlist[clientindex].Balance - int(event.message.text)),'3')
-                Write(clientindex,'0','5')
+            if int(event.message.text) > 0:
+                line_bot_api.reply_message(event.reply_token, 
+                    TextSendMessage(text="你繳交了"+event.message.text+"元給銀行"))
                 for user in userlist:
                     if user.Name != userlist[clientindex].Name:
-                        line_bot_api.push_message(user.ID, TextSendMessage(text=userlist[clientindex].Name+"繳交了"+event.message.text+"元給銀行"))
-                line_bot_api.reply_message(event.reply_token, TextSendMessage(text="你繳交了"+event.message.text+"元給銀行"))
+                        line_bot_api.push_message(user.ID, 
+                            TextSendMessage(text=userlist[clientindex].Name+"繳交了"+event.message.text+"元給銀行"))
+                if userlist[clientindex].Balance - int(event.message.text) < 0:
+                    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="你破產了"))
+                    for user in userlist:
+                        if user.Name != userlist[clientindex].Name:
+                            line_bot_api.push_message(user.ID, 
+                                TextSendMessage(text=userlist[clientindex].Name+"破產了"))
+                Write(clientindex,str(userlist[clientindex].Balance - int(event.message.text)),'3')
+                Write(clientindex,'0','5')
             else:
-                line_bot_api.reply_message(event.reply_token, TextSendMessage(text="沒有人罰錢罰0元的啦!!!"))
+                line_bot_api.reply_message(event.reply_token, 
+                    TextSendMessage(text="輸入金額錯誤"))
         except:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text='輸入錯誤，請輸入數字，\n並注意不要包含任何空格\n若要取消，請輸入\"取消\"'))
+            line_bot_api.reply_message(event.reply_token, 
+                TextSendMessage(text='輸入錯誤，請輸入數字，\n並注意不要包含任何空格\n若要取消，請輸入\"取消\"'))
 
 # 處理訊息
 @handler.add(MessageEvent, message=TextMessage)
@@ -258,16 +278,16 @@ def handle_postback(event):
         elif data[1] == 'f':
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請再次輸入您的姓名"))
     ##取消
-    elif data[0] == '-1' and userlist[clientindex].Situation!="0":
-        if userlist[clientindex].Situation!=0:
+    elif data[0] == '-1':
+        if int(data[1]) == userlist[clientindex].Step:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="你取消了交易"))
             Write(clientindex,str(userlist[clientindex].Step+1),'4')
             Write(clientindex,'0','5')
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="你取消了交易"))
     ##匯款
     elif data[0] == '1':
         if int(data[1]) == userlist[clientindex].Step:
-            Write(clientindex,"1`"+data[2],'5')
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="要匯給"+data[2]+"多少錢"))
+            Write(clientindex,"1`"+data[2],'5')
             Write(clientindex,str(userlist[clientindex].Step+1),4)
 
 
