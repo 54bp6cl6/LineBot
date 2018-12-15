@@ -121,6 +121,7 @@ def Play(event,userlist,clientindex):
                 line_bot_api.push_message(user.ID, TextSendMessage(text=userlist[clientindex].Name+"重啟了遊戲，你的存款變成了15000元"))
                 i+=1
         elif event.message.text== "匯款":
+            Write(clientindex,str(userlist[clientindex].Step+1),4)
             line_bot_api.reply_message(event.reply_token, 
                 TemplateSendMessage(
                     alt_text='匯款視窗',
@@ -142,6 +143,7 @@ def Play(event,userlist,clientindex):
             for user in userlist:
                 if user.Name == temp[1]:
                     Write(i,str(userlist[i].Balance + int(event.message.text)),'3')
+                    line_bot_api.push_message(user.ID, TextSendMessage(text=userlist[clientindex].Name+"匯給你"+event.message.text+"元"))
                     break
                 i+=1
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="你匯給了"+temp[1]+event.message.text+"元"))
@@ -194,13 +196,16 @@ def handle_postback(event):
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請再次輸入您的姓名"))
     ##取消
     elif data[0] == '-1':
-        Write(clientindex,str(userlist[clientindex].Step+1),'4')
-        Write(clientindex,'0`','5')
+        if userlist[clientindex].Situation!=0:
+            Write(clientindex,str(userlist[clientindex].Step+1),'4')
+            Write(clientindex,'0`','5')
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="你取消了交易"))
     ##匯款
     elif data[0] == '1':
         if int(data[1]) == userlist[clientindex].Step:
             Write(clientindex,"1`"+data[2],'5')
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="要匯給"+data[2]+"多少錢"))
+            Write(clientindex,str(userlist[clientindex].Step+1),4)
 
 
     
