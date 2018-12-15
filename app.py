@@ -199,7 +199,7 @@ def handle_postback(event):
     elif data[0] == '1':
         if int(data[1]) == userlist[clientindex].Step:
             Write(clientindex,"1`"+data[2],'5')
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="要匯給"+userlist[int(data[2])].Name+"多少錢"))
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="要匯給"+data[2]+"多少錢"))
 
 
     
