@@ -180,12 +180,16 @@ def Play(event,userlist,clientindex):
                 if int(event.message.text) <= userlist[clientindex].Balance:
                     line_bot_api.reply_message(event.reply_token, 
                         TextSendMessage(text="你匯給了"+temp[1]+event.message.text+"元"))
+                    line_bot_api.reply_message(event.push_token, 
+                        TextSendMessage(text="帳戶餘額："+str(userlist[clientindex].Balance)+"元"))
                     i=0
                     for user in userlist:
                         if user.Name == temp[1]:
                             Write(i,str(userlist[i].Balance + int(event.message.text)),'3')
                             line_bot_api.push_message(user.ID, 
                                 TextSendMessage(text=userlist[clientindex].Name+"匯給你"+event.message.text+"元"))
+                            line_bot_api.push_message(user.ID, 
+                                TextSendMessage(text="帳戶餘額："+str(user.Balance)+"元"))
                             break
                         i+=1
                     Write(clientindex,str(userlist[clientindex].Step + 1),'4')
@@ -206,6 +210,8 @@ def Play(event,userlist,clientindex):
             if int(event.message.text) > 0:
                 line_bot_api.reply_message(event.reply_token, 
                     TextSendMessage(text="你向銀行請領了"+event.message.text+"元"))
+                line_bot_api.reply_message(event.push_token, 
+                    TextSendMessage(text="帳戶餘額："+str(userlist[clientindex].Balance)+"元"))
                 for user in userlist:
                     if user.Name != userlist[clientindex].Name:
                         line_bot_api.push_message(user.ID, 
@@ -221,20 +227,20 @@ def Play(event,userlist,clientindex):
     elif temp[0] == '3':
         try:
             if int(event.message.text) > 0:
-                line_bot_api.reply_message(event.reply_token, 
-                    TextSendMessage(text="你繳交了"+event.message.text+"元給銀行"))
-                for user in userlist:
-                    if user.Name != userlist[clientindex].Name:
-                        line_bot_api.push_message(user.ID, 
-                            TextSendMessage(text=userlist[clientindex].Name+"繳交了"+event.message.text+"元給銀行"))
-                if userlist[clientindex].Balance - int(event.message.text) < 0:
-                    line_bot_api.push_message(event.source.user_id, TextSendMessage(text="你破產了"))
+                if userlist[clientindex].Balance - int(event.message.text) >= 0:
+                    line_bot_api.reply_message(event.reply_token, 
+                        TextSendMessage(text="你繳交了"+event.message.text+"元給銀行"))
+                    line_bot_api.reply_message(event.push_token, 
+                        TextSendMessage(text="帳戶餘額："+str(userlist[clientindex].Balance)+"元"))
                     for user in userlist:
                         if user.Name != userlist[clientindex].Name:
                             line_bot_api.push_message(user.ID, 
-                                TextSendMessage(text=userlist[clientindex].Name+"破產了"))
-                Write(clientindex,str(userlist[clientindex].Balance - int(event.message.text)),'3')
-                Write(clientindex,'0','5')
+                                TextSendMessage(text=userlist[clientindex].Name+"繳交了"+event.message.text+"元給銀行"))
+                    Write(clientindex,str(userlist[clientindex].Balance - int(event.message.text)),'3')
+                    Write(clientindex,'0','5')
+                else:
+                    line_bot_api.reply_message(event.reply_token, 
+                        TextSendMessage(text="輸入金額超過帳戶餘額，你剩下:"+str(userlist[clientindex].Balance)+"元"))
             else:
                 line_bot_api.reply_message(event.reply_token, 
                     TextSendMessage(text="輸入金額錯誤"))
