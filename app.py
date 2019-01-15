@@ -270,6 +270,15 @@ def Play(event,userlist,clientindex):
             for user in userlist:
                 out += user.Name + ":" + str(user.Balance) + "元\n"
             out += "---"
+
+            URL = "line://app/1597095214-Y1BrG15q?p="
+            for i in range(len(userlist)):
+                if i != clientindex:
+                    if i >= len(userlist):
+                        URL+=userlist[i].Name
+                    else:
+                        URL+=userlist[i].Name+"-"
+
             line_bot_api.push_message(userlist[clientindex].ID, 
                 TemplateSendMessage(
                     alt_text='開啟ATM面板',
