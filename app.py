@@ -170,7 +170,7 @@ def Play(event,userlist,clientindex):
                 Write(i,"1",'4')
                 Write(i,"0",'5')
                 i+=1
-        elif event.message.text.find("ATM面板"):
+        elif event.message.text.find("ATM面板") != -1:
             openAtmUi(event,userlist,clientindex)
         elif command[0] == "pay" or command[0] == "get" or command[0] == "give":
             if command[0] == "pay":
