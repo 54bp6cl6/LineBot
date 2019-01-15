@@ -145,6 +145,10 @@ def openAtmUi(event,userlist,clientindex):
                     URITemplateAction(
                         label='開啟ATM面板',
                         uri=URL
+                    ),
+                    URITemplateAction(
+                        label='開啟ATM面板',
+                        uri=URL
                     )
                 ]
             )
