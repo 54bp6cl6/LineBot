@@ -136,7 +136,7 @@ def openAtmUi(event,userlist,clientindex):
             else:
                 URL+=userlist[i].Name+"-"
 
-    line_bot_api.reply_message(event.reply_token, 
+    line_bot_api.push_message(userlist[clientindex].ID, 
         TemplateSendMessage(
             alt_text='開啟ATM面板',
             template=ConfirmTemplate(
@@ -188,7 +188,7 @@ def Play(event,userlist,clientindex):
                             if user.Name != userlist[clientindex].Name:
                                 line_bot_api.push_message(user.ID, 
                                     TextSendMessage(text=userlist[clientindex].Name+"繳交了"+command[1]+"元給銀行"))
-                        Write(clientindex,str(userlist[clientindex].Balance - int(command[1])),'3')
+                        Write(clientindex,str(userlist[clientindex].Balance),'3')
                         Write(clientindex,'0','5')
                     else:
                         line_bot_api.reply_message(event.reply_token, 
@@ -206,7 +206,7 @@ def Play(event,userlist,clientindex):
                         if user.Name != userlist[clientindex].Name:
                             line_bot_api.push_message(user.ID, 
                                 TextSendMessage(text=userlist[clientindex].Name+"向銀行請領了"+command[1]+"元"))
-                    Write(clientindex,str(userlist[clientindex].Balance + int(command[1])),'3')
+                    Write(clientindex,str(userlist[clientindex].Balance),'3')
                     Write(clientindex,'0','5')
                 except:
                     line_bot_api.reply_message(event.reply_token, 
@@ -232,10 +232,10 @@ def Play(event,userlist,clientindex):
                             i=0
                             for user in userlist:
                                 if user.Name == command[1]:
-                                    Write(i,str(userlist[i].Balance + int(command[2])),'3')
+                                    user.Balance += int(command[2])
+                                    Write(i,str(userlist[i].Balance),'3')
                                     line_bot_api.push_message(user.ID, 
                                         TextSendMessage(text=userlist[clientindex].Name+"匯給你"+command[2]+"元"))
-                                    user.Balance += int(command[2])
                                     openAtmUi(event,userlist,i)
                                     break
                                 i+=1
