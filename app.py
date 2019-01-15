@@ -147,7 +147,7 @@ def openAtmUi(event,userlist,clientindex):
                         uri=URL
                     ),
                     URITemplateAction(
-                        label='',
+                        label='!',
                         uri=URL
                     )
                 ]
@@ -283,14 +283,14 @@ def Play(event,userlist,clientindex):
                 TemplateSendMessage(
                     alt_text='開啟ATM面板',
                     template=ConfirmTemplate(
-                        text="out",
+                        text=out,
                         actions=[
                             URITemplateAction(
                                 label='開啟ATM面板',
                                 uri=URL
                             ),
                             URITemplateAction(
-                                label='',
+                                label='!',
                                 uri=URL
                             )
                         ]
