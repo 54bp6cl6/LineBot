@@ -240,7 +240,7 @@ def Play(event,userlist,clientindex):
                                     break
                                 i+=1
                             Write(clientindex,str(userlist[clientindex].Step + 1),'4')
-                            Write(clientindex,str(userlist[clientindex].Balance - int(command[2])),'3')
+                            Write(clientindex,str(userlist[clientindex].Balance),'3')
                             Write(clientindex,'0','5')
                         else:
                             line_bot_api.reply_message(event.reply_token, 
