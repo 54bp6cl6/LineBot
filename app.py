@@ -189,31 +189,31 @@ def Play(event,userlist,clientindex):
                         if user.Name == command[1]:
                             checked = True
                             break
-                    if !checked :
+                    if not checked :
                         line_bot_api.reply_message(event.reply_token, 
                         TextSendMessage(text="找不到此玩家"))
                     else:
                         if int(command[2]) <= userlist[clientindex].Balance:
-                        line_bot_api.reply_message(event.reply_token, 
-                            TextSendMessage(text="你匯給了"+command[1]+command[2]+"元"))
-                        line_bot_api.push_message(userlist[clientindex].ID, 
-                            TextSendMessage(text="帳戶餘額："+str(userlist[clientindex].Balance - int(command[2]))+"元"))
-                        i=0
-                        for user in userlist:
-                            if user.Name == command[1]:
-                                Write(i,str(userlist[i].Balance + int(command[2])),'3')
-                                line_bot_api.push_message(user.ID, 
-                                    TextSendMessage(text=userlist[clientindex].Name+"匯給你"+command[2]+"元"))
-                                line_bot_api.push_message(user.ID, 
-                                    TextSendMessage(text="帳戶餘額："+str(user.Balance + int(command[2]))+"元"))
-                                break
-                            i+=1
-                        Write(clientindex,str(userlist[clientindex].Step + 1),'4')
-                        Write(clientindex,str(userlist[clientindex].Balance - int(command[2])),'3')
-                        Write(clientindex,'0','5')
-                    else:
-                        line_bot_api.reply_message(event.reply_token, 
-                            TextSendMessage(text="匯款金額超過你的餘額("+str(userlist[clientindex].Balance)+")，請重新輸入"))
+                            line_bot_api.reply_message(event.reply_token, 
+                                TextSendMessage(text="你匯給了"+command[1]+command[2]+"元"))
+                            line_bot_api.push_message(userlist[clientindex].ID, 
+                                TextSendMessage(text="帳戶餘額："+str(userlist[clientindex].Balance - int(command[2]))+"元"))
+                            i=0
+                            for user in userlist:
+                                if user.Name == command[1]:
+                                    Write(i,str(userlist[i].Balance + int(command[2])),'3')
+                                    line_bot_api.push_message(user.ID, 
+                                        TextSendMessage(text=userlist[clientindex].Name+"匯給你"+command[2]+"元"))
+                                    line_bot_api.push_message(user.ID, 
+                                        TextSendMessage(text="帳戶餘額："+str(user.Balance + int(command[2]))+"元"))
+                                    break
+                                i+=1
+                            Write(clientindex,str(userlist[clientindex].Step + 1),'4')
+                            Write(clientindex,str(userlist[clientindex].Balance - int(command[2])),'3')
+                            Write(clientindex,'0','5')
+                        else:
+                            line_bot_api.reply_message(event.reply_token, 
+                                TextSendMessage(text="匯款金額超過你的餘額("+str(userlist[clientindex].Balance)+")，請重新輸入"))
                 except:
                     line_bot_api.reply_message(event.reply_token, 
                         TextSendMessage(text='輸入錯誤，請輸入數字，\n並注意不要包含任何空格\n若要取消，請輸入\"取消\"'))
