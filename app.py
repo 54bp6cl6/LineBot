@@ -145,7 +145,7 @@ def Play(event,userlist,clientindex):
                 Write(i,"1",'4')
                 Write(i,"0",'5')
                 i+=1
-        elif command[0] == "pay" || command[0] == "get" || command[0] == "give":
+        elif command[0] == "pay" or command[0] == "get" or command[0] == "give":
             if command[0] == "pay":
                 try:
                     if userlist[clientindex].Balance - int(command[1]) >= 0:
