@@ -267,7 +267,7 @@ def Play(event,userlist,clientindex):
             Write(clientindex,'3','5')
         elif event.message.text == "帳戶餘額":
 
-            set = [SeparatorComponent()]
+            set = [TextComponent(text='帳戶餘額', weight='bold', size='xl',spacing='none'),SeparatorComponent(margin='xs')]
             out = "---\n"
             for user in userlist:
                 out += user.Name + ":" + str(user.Balance) + "元\n"
@@ -279,20 +279,20 @@ def Play(event,userlist,clientindex):
                                 layout='horizontal',
                                 direction='ltr',
                                 contents=[
-                                    TextComponent(text=user.Name, weight='bold', size='xl')
+                                    TextComponent(text=user.Name, weight='bold', size='lg')
                                 ]
                             ),
                             BoxComponent(
                                 layout='horizontal',
                                 direction='rtl',
                                 contents=[
-                                    TextComponent(text='$'+str(user.Balance), weight='bold', size='xl')
+                                    TextComponent(text='$'+str(user.Balance), weight='bold', size='lg')
                                 ]
                             )
                         ]
                     )
                 )
-            set.append(SeparatorComponent())
+            set.append(SeparatorComponent(margin='xs'))
             out += "---"
 
             URL = "line://app/1597095214-Y1BrG15q?p="
@@ -307,12 +307,6 @@ def Play(event,userlist,clientindex):
 
             bubble = BubbleContainer(
                 direction='ltr',
-                header=BoxComponent(
-                    layout='vertical',
-                    contents=[
-                        TextComponent(text='帳戶餘額', weight='bold', size='xxl',spacing='none'),
-                    ]
-                ),
                 body=BoxComponent(
                     layout='vertical',
                     flex=1,
