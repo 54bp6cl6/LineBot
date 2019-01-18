@@ -309,7 +309,6 @@ def Play(event,userlist,clientindex):
                 direction='ltr',
                 body=BoxComponent(
                     layout='vertical',
-                    flex=1,
                     spacing='sm',
                     contents=set
                 ),
@@ -320,6 +319,7 @@ def Play(event,userlist,clientindex):
                         ButtonComponent(
                             style='primary',
                             height='sm',
+                            color='#4C9CFF',
                             action=URIAction(label='開啟ATM面板', uri=URL),
                         )
                     ]
