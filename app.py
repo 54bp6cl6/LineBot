@@ -146,7 +146,7 @@ def openAtmUi(event,userlist,clientindex):
                     layout='horizontal',
                     direction='ltr',
                     contents=[
-                        TextComponent(text="帳戶餘額", weight='regular', color='#4C9CFF', size='lg')
+                        TextComponent(text="帳戶餘額", weight='bold', color='#4C9CFF', size='lg')
                     ]
                 ),
                 BoxComponent(
