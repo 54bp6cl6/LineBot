@@ -140,7 +140,7 @@ def openAtmUi(event,userlist,clientindex):
     bubble = BubbleContainer(
         direction='ltr',
         body=BoxComponent(
-            layout='vertical',
+            layout='horizontal',
             spacing='sm',
             contents=[
                 BoxComponent(
@@ -175,25 +175,6 @@ def openAtmUi(event,userlist,clientindex):
     line_bot_api.push_message(userlist[clientindex].ID,
         FlexSendMessage(alt_text="帳戶餘額", contents=bubble))
     #-------------------------------------------
-
-    line_bot_api.push_message(userlist[clientindex].ID, 
-        TemplateSendMessage(
-            alt_text='開啟ATM面板',
-            template=ConfirmTemplate(
-                text="帳戶餘額："+str(userlist[clientindex].Balance)+"元",
-                actions=[
-                    URITemplateAction(
-                        label='開啟ATM面板',
-                        uri=URL
-                    ),
-                    URITemplateAction(
-                        label='!',
-                        uri=URL
-                    )
-                ]
-            )
-        )
-    )
 
 
 def Play(event,userlist,clientindex):
