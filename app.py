@@ -136,6 +136,46 @@ def openAtmUi(event,userlist,clientindex):
             else:
                 URL+=userlist[i].Name+"-"
 
+    #-------------------------------------------
+    bubble = BubbleContainer(
+        direction='ltr',
+        body=BoxComponent(
+            layout='vertical',
+            spacing='sm',
+            contents=[
+                BoxComponent(
+                    layout='horizontal',
+                    direction='ltr',
+                    contents=[
+                        TextComponent(text="帳戶餘額", weight='regular', size='lg')
+                    ]
+                ),
+                BoxComponent(
+                    layout='horizontal',
+                    direction='rtl',
+                    contents=[
+                        TextComponent(text='$ '+str(userlist[clientindex].Balance), weight='regular', size='lg')
+                    ]
+                )
+            ]
+        ),
+        footer=BoxComponent(
+            layout='vertical',
+            spacing='sm',
+            contents=[
+                ButtonComponent(
+                    style='primary',
+                    height='sm',
+                    color='#4C9CFF',
+                    action=URIAction(label='開啟ATM面板', uri=URL),
+                )
+            ]
+        )
+    )
+    line_bot_api.push_message(userlist[clientindex].ID,
+        FlexSendMessage(alt_text="帳戶餘額", contents=bubble))
+    #-------------------------------------------
+
     line_bot_api.push_message(userlist[clientindex].ID, 
         TemplateSendMessage(
             alt_text='開啟ATM面板',
@@ -267,10 +307,9 @@ def Play(event,userlist,clientindex):
             Write(clientindex,'3','5')
         elif event.message.text == "帳戶餘額":
 
-            set = [TextComponent(text='帳戶餘額', weight='bold', size='xl',spacing='none',color='#4C9CFF'),SeparatorComponent(margin='sm')]
-            out = "---\n"
+            set = [TextComponent(text='帳戶餘額', weight='bold', size='xl',spacing='none',color='#4C9CFF'),
+                SeparatorComponent(margin='sm')]
             for user in userlist:
-                out += user.Name + ":" + str(user.Balance) + "元\n"
                 set.append(
                     BoxComponent(
                         layout='horizontal',
@@ -286,14 +325,13 @@ def Play(event,userlist,clientindex):
                                 layout='horizontal',
                                 direction='rtl',
                                 contents=[
-                                    TextComponent(text='$'+str(user.Balance), weight='regular', size='lg')
+                                    TextComponent(text='$ '+str(user.Balance), weight='regular', size='lg')
                                 ]
                             )
                         ]
                     )
                 )
             set.append(SeparatorComponent(margin='sm'))
-            out += "---"
 
             URL = "line://app/1597095214-Y1BrG15q?p="
             for i in range(len(userlist)):
@@ -302,8 +340,6 @@ def Play(event,userlist,clientindex):
                         URL+=userlist[i].Name
                     else:
                         URL+=userlist[i].Name+"-"
-
-            #---------------------------------------------
 
             bubble = BubbleContainer(
                 direction='ltr',
@@ -328,26 +364,6 @@ def Play(event,userlist,clientindex):
             line_bot_api.push_message(userlist[clientindex].ID,
                 FlexSendMessage(alt_text="帳戶餘額", contents=bubble))
 
-            #---------------------------------------------
-
-            # line_bot_api.push_message(userlist[clientindex].ID, 
-            #     TemplateSendMessage(
-            #         alt_text='開啟ATM面板',
-            #         template=ConfirmTemplate(
-            #             text=out,
-            #             actions=[
-            #                 URITemplateAction(
-            #                     label='開啟ATM面板',
-            #                     uri=URL
-            #                 ),
-            #                 URITemplateAction(
-            #                     label='!',
-            #                     uri=URL
-            #                 )
-            #             ]
-            #         )
-            #     )
-            # )
         elif event.message.text[0:3] == "作弊,":
             data = event.message.text.split(',')
             for user in userlist:
