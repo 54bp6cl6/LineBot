@@ -136,43 +136,24 @@ def openAtmUi(event,userlist,clientindex):
             else:
                 URL+=userlist[i].Name+"-"
 
-    bubble = BubbleContainer(
-        direction='ltr',
-        body=BoxComponent(
-            layout='horizontal',
-            spacing='sm',
-            contents=[
-                BoxComponent(
-                    layout='horizontal',
-                    direction='ltr',
-                    contents=[
-                        TextComponent(text="帳戶餘額", weight='bold', color='#4C9CFF', size='lg')
-                    ]
-                ),
-                BoxComponent(
-                    layout='horizontal',
-                    direction='rtl',
-                    contents=[
-                        TextComponent(text='$ '+str(userlist[clientindex].Balance), weight='regular', size='lg')
-                    ]
-                )
-            ]
-        ),
-        footer=BoxComponent(
-            layout='vertical',
-            spacing='sm',
-            contents=[
-                ButtonComponent(
-                    style='primary',
-                    height='sm',
-                    color='#4C9CFF',
-                    action=URIAction(label='開啟ATM面板', uri=URL),
-                )
-            ]
+    line_bot_api.push_message(userlist[clientindex].ID, 
+        TemplateSendMessage(
+            alt_text='開啟ATM面板',
+            template=ConfirmTemplate(
+                text="帳戶餘額："+str(userlist[clientindex].Balance)+"元",
+                actions=[
+                    URITemplateAction(
+                        label='開啟ATM面板',
+                        uri=URL
+                    ),
+                    URITemplateAction(
+                        label='!',
+                        uri=URL
+                    )
+                ]
+            )
         )
     )
-    line_bot_api.push_message(userlist[clientindex].ID,
-        FlexSendMessage(alt_text="帳戶餘額", contents=bubble))
 
 
 def Play(event,userlist,clientindex):
@@ -285,32 +266,10 @@ def Play(event,userlist,clientindex):
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="你要繳交多少錢？"))
             Write(clientindex,'3','5')
         elif event.message.text == "帳戶餘額":
-
-            set = [TextComponent(text='帳戶餘額', weight='bold', size='xl',spacing='none',color='#4C9CFF'),
-                SeparatorComponent(margin='sm')]
+            out = "---\n"
             for user in userlist:
-                set.append(
-                    BoxComponent(
-                        layout='horizontal',
-                        contents=[
-                            BoxComponent(
-                                layout='horizontal',
-                                direction='ltr',
-                                contents=[
-                                    TextComponent(text=user.Name, weight='regular', size='lg')
-                                ]
-                            ),
-                            BoxComponent(
-                                layout='horizontal',
-                                direction='rtl',
-                                contents=[
-                                    TextComponent(text='$ '+str(user.Balance), weight='regular', size='lg')
-                                ]
-                            )
-                        ]
-                    )
-                )
-            set.append(SeparatorComponent(margin='sm'))
+                out += user.Name + ":" + str(user.Balance) + "元\n"
+            out += "---"
 
             URL = "line://app/1597095214-Y1BrG15q?p="
             for i in range(len(userlist)):
@@ -320,29 +279,24 @@ def Play(event,userlist,clientindex):
                     else:
                         URL+=userlist[i].Name+"-"
 
-            bubble = BubbleContainer(
-                direction='ltr',
-                body=BoxComponent(
-                    layout='vertical',
-                    spacing='sm',
-                    contents=set
-                ),
-                footer=BoxComponent(
-                    layout='vertical',
-                    spacing='sm',
-                    contents=[
-                        ButtonComponent(
-                            style='primary',
-                            height='sm',
-                            color='#4C9CFF',
-                            action=URIAction(label='開啟ATM面板', uri=URL),
-                        )
-                    ]
+            line_bot_api.push_message(userlist[clientindex].ID, 
+                TemplateSendMessage(
+                    alt_text='開啟ATM面板',
+                    template=ConfirmTemplate(
+                        text=out,
+                        actions=[
+                            URITemplateAction(
+                                label='開啟ATM面板',
+                                uri=URL
+                            ),
+                            URITemplateAction(
+                                label='!',
+                                uri=URL
+                            )
+                        ]
+                    )
                 )
             )
-            line_bot_api.push_message(userlist[clientindex].ID,
-                FlexSendMessage(alt_text="帳戶餘額", contents=bubble))
-
         elif event.message.text[0:3] == "作弊,":
             data = event.message.text.split(',')
             for user in userlist:
