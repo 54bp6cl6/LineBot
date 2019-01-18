@@ -279,14 +279,14 @@ def Play(event,userlist,clientindex):
                                 layout='horizontal',
                                 direction='ltr',
                                 contents=[
-                                    TextComponent(text=user.Name, weight='bold', size='xxl')
+                                    TextComponent(text=user.Name, weight='bold', size='xl')
                                 ]
                             ),
                             BoxComponent(
                                 layout='horizontal',
                                 direction='rtl',
                                 contents=[
-                                    TextComponent(text='$'+str(user.Balance), weight='bold', size='xxl')
+                                    TextComponent(text='$'+str(user.Balance), weight='bold', size='xl')
                                 ]
                             )
                         ]
