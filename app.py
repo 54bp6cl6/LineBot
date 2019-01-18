@@ -309,7 +309,7 @@ def Play(event,userlist,clientindex):
                 header=BoxComponent(
                     layout='vertical',
                     contents=[
-                        TextComponent(text='帳戶餘額', weight='bold', size='xl',spacing='none'),
+                        TextComponent(text='帳戶餘額', weight='bold', size='xxl',spacing='none'),
                     ]
                 ),
                 body=BoxComponent(
