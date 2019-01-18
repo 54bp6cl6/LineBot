@@ -275,8 +275,20 @@ def Play(event,userlist,clientindex):
                     BoxComponent(
                         layout='horizontal',
                         contents=[
-                            TextComponent(text=user.Name, weight='bold', size='xxl',direction='ltr')
-                            TextComponent(text='$'+str(user.Balance), weight='bold', size='xxl',direction='rtl')
+                            BoxComponent(
+                                layout='horizontal',
+                                direction='ltr',
+                                contents=[
+                                    TextComponent(text=user.Name, weight='bold', size='xxl')
+                                ]
+                            ),
+                            BoxComponent(
+                                layout='horizontal',
+                                direction='rtl',
+                                contents=[
+                                    TextComponent(text='$'+str(user.Balance), weight='bold', size='xxl')
+                                ]
+                            )
                         ]
                     )
                 )
@@ -297,7 +309,7 @@ def Play(event,userlist,clientindex):
                 header=BoxComponent(
                     layout='vertical',
                     contents=[
-                        TextComponent(text='帳戶餘額', weight='bold', size='xl'),
+                        TextComponent(text='帳戶餘額', weight='bold', size='xl',spacing='none'),
                     ]
                 ),
                 body=BoxComponent(
