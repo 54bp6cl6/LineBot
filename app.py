@@ -267,7 +267,7 @@ def Play(event,userlist,clientindex):
             Write(clientindex,'3','5')
         elif event.message.text == "帳戶餘額":
 
-            set = [TextComponent(text='帳戶餘額', weight='bold', size='xl',spacing='none'),SeparatorComponent(margin='xs')]
+            set = [TextComponent(text='帳戶餘額', weight='bold', size='xl',spacing='none',color='#4C9CFF'),SeparatorComponent(margin='sm')]
             out = "---\n"
             for user in userlist:
                 out += user.Name + ":" + str(user.Balance) + "元\n"
@@ -279,20 +279,20 @@ def Play(event,userlist,clientindex):
                                 layout='horizontal',
                                 direction='ltr',
                                 contents=[
-                                    TextComponent(text=user.Name, weight='bold', size='lg')
+                                    TextComponent(text=user.Name, weight='regular', size='lg')
                                 ]
                             ),
                             BoxComponent(
                                 layout='horizontal',
                                 direction='rtl',
                                 contents=[
-                                    TextComponent(text='$'+str(user.Balance), weight='bold', size='lg')
+                                    TextComponent(text='$'+str(user.Balance), weight='regular', size='lg')
                                 ]
                             )
                         ]
                     )
                 )
-            set.append(SeparatorComponent(margin='xs'))
+            set.append(SeparatorComponent(margin='sm'))
             out += "---"
 
             URL = "line://app/1597095214-Y1BrG15q?p="
