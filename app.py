@@ -267,9 +267,11 @@ def Play(event,userlist,clientindex):
             Write(clientindex,'3','5')
         elif event.message.text == "帳戶餘額":
 
+            set = []
             out = "---\n"
             for user in userlist:
                 out += user.Name + ":" + str(user.Balance) + "元\n"
+                set.append(TextComponent(text=user.Name + ":" + str(user.Balance) + "元", weight='regular', size='md'))
             out += "---"
 
             URL = "line://app/1597095214-Y1BrG15q?p="
@@ -284,12 +286,15 @@ def Play(event,userlist,clientindex):
 
             bubble = BubbleContainer(
                 direction='ltr',
-                header=TextComponent(text='帳戶餘額', weight='bold', size='xl'),
-                body=BoxComponent(
+                header=BoxComponent(
                     layout='vertical',
                     contents=[
-                        TextComponent(text=out, weight='regular', size='md')
+                        TextComponent(text='帳戶餘額', weight='bold', size='xl'),
                     ]
+                ),
+                body=BoxComponent(
+                    layout='vertical',
+                    contents=set
                 ),
                 footer=BoxComponent(
                     layout='vertical',
