@@ -271,7 +271,15 @@ def Play(event,userlist,clientindex):
             out = "---\n"
             for user in userlist:
                 out += user.Name + ":" + str(user.Balance) + "元\n"
-                set.append(TextComponent(text=user.Name + ":" + str(user.Balance) + "元", weight='regular', size='md'))
+                set.append(
+                    BoxComponent(
+                        layout='horizontal',
+                        contents=[
+                            TextComponent(text=user.Name, weight='bold', size='xxl',direction='ltr')
+                            TextComponent(text='$'+str(user.Balance), weight='bold', size='xxl',direction='rtl')
+                        ]
+                    )
+                )
             out += "---"
 
             URL = "line://app/1597095214-Y1BrG15q?p="
@@ -294,6 +302,8 @@ def Play(event,userlist,clientindex):
                 ),
                 body=BoxComponent(
                     layout='vertical',
+                    flex=1,
+                    spacing=sm,
                     contents=set
                 ),
                 footer=BoxComponent(
