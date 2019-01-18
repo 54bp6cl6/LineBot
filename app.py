@@ -267,7 +267,7 @@ def Play(event,userlist,clientindex):
             Write(clientindex,'3','5')
         elif event.message.text == "帳戶餘額":
 
-            set = []
+            set = [SeparatorComponent()]
             out = "---\n"
             for user in userlist:
                 out += user.Name + ":" + str(user.Balance) + "元\n"
@@ -292,6 +292,7 @@ def Play(event,userlist,clientindex):
                         ]
                     )
                 )
+            set.append(SeparatorComponent())
             out += "---"
 
             URL = "line://app/1597095214-Y1BrG15q?p="
