@@ -315,7 +315,7 @@ def Play(event,userlist,clientindex):
                 body=BoxComponent(
                     layout='vertical',
                     flex=1,
-                    spacing=sm,
+                    spacing='sm',
                     contents=set
                 ),
                 footer=BoxComponent(
