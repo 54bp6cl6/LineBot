@@ -81,7 +81,7 @@ def handle_message(event):
             signup(data,event)
         else :
             line_bot_api.push_message(event.source.user_id,
-            TextSendMessage(text=data["users"][client_index]["name"]))
+            TextSendMessage(text=data["users"][client_index]["balance"]))
 
     except Exception as e:
         line_bot_api.push_message(event.source.user_id,
