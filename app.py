@@ -153,7 +153,7 @@ def handle_message(event):
                         data["users"][client_index]["name"]+"繳付了"+command[1]+"元")
                 else:
                     line_bot_api.push_message(event.source.user_id,TextSendMessage(
-                            text="付款失敗：錢不夠啦!("+data["users"][client_index]["balance"]+")"))
+                            text="付款失敗：錢不夠啦!("+str(data["users"][client_index]["balance"])+")"))
             else:
                 line_bot_api.push_message(event.source.user_id,
                     TextSendMessage(text="付款失敗：輸入格式有誤"))
