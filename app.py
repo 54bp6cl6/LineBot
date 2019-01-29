@@ -209,6 +209,8 @@ def handle_message(event):
             else:
                 line_bot_api.push_message(event.source.user_id,
                     TextSendMessage(text="匯款失敗：輸入格式有誤"))
+        else:
+            open_atm_ui(data,client_index)
     except Exception as e:
         line_bot_api.push_message(event.source.user_id,
             TextSendMessage(text="歐歐!發生了一點錯誤!\n"+
@@ -238,6 +240,7 @@ def handle_postback(event):
                         break
                 #-------------
                 line_bot_api.reply_message(event.reply_token, TextSendMessage(text="註冊成功，努力成為大富翁吧!!"))
+                open_atm_ui(data,client_index)
             elif command[1] == 'f':
                 line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請再次輸入您的姓名"))
         
