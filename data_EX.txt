@@ -1,0 +1,15 @@
+{
+	"ver": 123, 
+	"accounts": [
+		{
+			"id": "qergwthwrth", 
+			"name": "\u4eba\u8c6a", 
+			"balance": 200
+		}, 
+		{
+			"id": "12345765",
+			"name": "\u96de\u516b\u51a0",
+			"balance": 0
+		}
+	]
+}
