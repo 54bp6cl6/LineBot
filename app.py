@@ -136,7 +136,7 @@ def handle_message(event):
         elif command[0] == "pay":
             if check_money(command[1]):
                 money = int(command[1])
-                if money <= int(data["users"][client_index]["balance"]):
+                if money <= data["users"][client_index]["balance"]:
                     #確保資料正確性
                     while True:
                         data = get_data()
