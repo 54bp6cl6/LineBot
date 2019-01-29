@@ -72,17 +72,143 @@ def check_data(new_data):
     else:
         return False
 
+def restart():
+    write({
+        "ver": 0, 
+        "users": []
+    })
+
+def open_atm_ui(data,client_index):
+    URL = "line://app/1597095214-Y1BrG15q?p="
+    for i in range(len(data["users"])):
+        if i != client_index:
+            if i >= len(data["users"]):
+                URL+=data["users"][i]["name"]
+            else:
+                URL+=data["users"][i]["name"]+"-"
+
+    line_bot_api.push_message(data["users"][client_index]["id"], 
+        TemplateSendMessage(
+            alt_text='開啟ATM面板',
+            template=ConfirmTemplate(
+                text="帳戶餘額："+str(data["users"][i]["name"]["balance"])+"元",
+                actions=[
+                    URITemplateAction(
+                        label='開啟',
+                        uri=URL
+                    ),
+                    URITemplateAction(
+                        label='ATM',
+                        uri=URL
+                    )
+                ]
+            )
+        )
+    )
+
+def check_money(str_money):
+    try:
+        if int(str_money) <= 0:
+            return False
+        else:
+            return True
+    except:
+        return False
+
+def broadcast(data,client_index,output):
+    for i in range(len(data["users"])):
+        if i != client_index:
+            line_bot_api.push_message(data["users"][i]["id"],
+                    TextSendMessage(text=output))
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     try:
         data = get_data()
         client_index = login(data,event.source.user_id)
+        command = event.postback.data.split(',')
         if client_index == -1 :
             signup(data,event)
-        else :
-            line_bot_api.push_message(event.source.user_id,
-            TextSendMessage(text=data["users"][client_index]["balance"]))
-
+        elif command[0] == "restart":
+            restart()
+        elif command[0] == "ATM面板":
+            open_atm_ui(data,client_index)
+        elif command[0] == "pay":
+            if check_money(command[1]):
+                money = int(command[1])
+                if money <= int(data["users"][client_index]["balance"])
+                    #確保資料正確性
+                    while True:
+                        data = get_data()
+                        data["users"][client_index][balance] -= money
+                        data["ver"] += 1
+                        if check_data(data):
+                            write(data)
+                            break
+                    #-------------
+                    line_bot_api.push_message(event.source.user_id,
+                        TextSendMessage(text="你向銀行繳付了"+command[1]+"元"))
+                    open_atm_ui(data,client_index)
+                    broadcast(data,client_index,
+                        data["users"][client_index]["name"]+"繳付了"+command[1]+"元")
+                else:
+                    line_bot_api.push_message(event.source.user_id,TextSendMessage(
+                            text="付款失敗：錢不夠啦!("+data["users"][client_index]["balance"]+")"))
+            else:
+                line_bot_api.push_message(event.source.user_id,
+                    TextSendMessage(text="付款失敗：輸入格式有誤"))
+        elif command[0] == "get":
+            if check_money(command[1]):
+                #確保資料正確性
+                while True:
+                    data = get_data()
+                    data["users"][client_index]["balance"] += int(command[1])
+                    data["ver"] += 1
+                    if check_data(data):
+                        write(data)
+                        break
+                #-------------
+                line_bot_api.push_message(event.source.user_id,
+                    TextSendMessage(text="你向銀行請領了"+command[1]+"元"))
+                open_atm_ui(data,client_index)
+                broadcast(data,client_index,
+                    data["users"][client_index]["name"]+"向銀行請領了"+command[1]+"元")
+            else:
+                line_bot_api.push_message(event.source.user_id,
+                    TextSendMessage(text="請款失敗：輸入格式有誤"))
+        elif command[0] == "give":
+            if check_money(command[2]):
+                money = int(command[2])
+                if money <= int(data["users"][client_index]["balance"])
+                    finded = False
+                    for i in range(len(data["users"])):
+                        if data["users"][i]["name"] == command[1]:
+                            finded = True
+                            #確保資料正確性
+                            while True:
+                                data = get_data()
+                                data["users"][i]["balance"]+=money
+                                data["users"][client_index]["balance"]-=money
+                                data["ver"] += 1
+                                if check_data(data):
+                                    write(data)
+                                    break
+                            #-------------
+                            line_bot_api.push_message(event.source.user_id,
+                                TextSendMessage(text="你匯給"+command[1]+command[2]+"元"))
+                            open_atm_ui(data,client_index)
+                            line_bot_api.push_message(data["users"][i]["id"],TextSendMessage(
+                                text=data["users"][client_index]["name"]+"匯給你"+command[2]+"元"))
+                            open_atm_ui(data,i)
+                    if not finded:
+                        line_bot_api.push_message(event.source.user_id,
+                                TextSendMessage(text="找不到此匯款對象("+command[1]+")"))
+                else:
+                    line_bot_api.push_message(event.source.user_id,TextSendMessage(
+                        text="匯款失敗：錢不夠啦!("+data["users"][client_index]["balance"]+")"))
+            else:
+                line_bot_api.push_message(event.source.user_id,
+                    TextSendMessage(text="匯款失敗：輸入格式有誤"))
     except Exception as e:
         line_bot_api.push_message(event.source.user_id,
             TextSendMessage(text="歐歐!發生了一點錯誤!\n"+
@@ -106,7 +232,7 @@ def handle_postback(event):
                         "name":command[2],
                         "balance":15000
                     })
-                    data["ver"] = data["ver"]+1
+                    data["ver"] += 1
                     if check_data(data):
                         write(data)
                         break
