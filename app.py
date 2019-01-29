@@ -126,7 +126,7 @@ def handle_message(event):
     try:
         data = get_data()
         client_index = login(data,event.source.user_id)
-        command = event.postback.data.split(',')
+        command = event.message.text.split(',')
         if client_index == -1 :
             signup(data,event)
         elif command[0] == "restart":
