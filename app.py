@@ -140,7 +140,7 @@ def handle_message(event):
                     #確保資料正確性
                     while True:
                         data = get_data()
-                        data["users"][client_index][balance] -= money
+                        data["users"][client_index]["balance"] -= money
                         data["ver"] += 1
                         if check_data(data):
                             write(data)
