@@ -101,7 +101,7 @@ def handle_postback(event):
                 #確保資料正確性
                 while True:
                     data = get_data()
-                    data["accounts"].append({
+                    data["users"].append({
                         "id":event.source.user_id,
                         "name":command[2],
                         "balance":15000
