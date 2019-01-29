@@ -50,21 +50,21 @@ def login(data,user_id):
 def signup(data,event):
     message = TemplateSendMessage(
         alt_text='您叫做'+event.message.text+'嗎?',
-                template=ConfirmTemplate(
-                    text='初次使用需要登記姓名\n您叫做'+event.message.text+'嗎?',
-                    actions=[
-                        PostbackTemplateAction(
-                            label='對',
-                            data='0`t`'+event.message.text
-                        ),
-                        PostbackTemplateAction(
-                            label='不對',
-                            data='0`f'
-                        )
-                    ]
+        template=ConfirmTemplate(
+            text='初次使用需要登記姓名\n您叫做'+event.message.text+'嗎?',
+            actions=[
+                PostbackTemplateAction(
+                    label='對',
+                    data='0`t`'+event.message.text
+                ),
+                PostbackTemplateAction(
+                    label='不對',
+                    data='0`f'
                 )
-            )
-            line_bot_api.reply_message(event.reply_token, message)
+            ]
+        )
+    )
+    line_bot_api.reply_message(event.reply_token, message)
 
 def check_data(new_data):
     if get_data()["ver"] == new_data["ver"]-1:
