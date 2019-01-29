@@ -91,7 +91,7 @@ def open_atm_ui(data,client_index):
         TemplateSendMessage(
             alt_text='開啟ATM面板',
             template=ConfirmTemplate(
-                text="帳戶餘額："+str(data["users"][i]["name"]["balance"])+"元",
+                text="帳戶餘額："+str(data["users"][i]["balance"])+"元",
                 actions=[
                     URITemplateAction(
                         label='開啟',
@@ -131,7 +131,7 @@ def handle_message(event):
             signup(data,event)
         elif command[0] == "restart":
             restart()
-        elif command[0] == "ATM面板":
+        elif command[0] == "帳戶餘額":
             open_atm_ui(data,client_index)
         elif command[0] == "pay":
             if check_money(command[1]):
