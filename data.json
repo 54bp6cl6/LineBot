@@ -1,8 +1,4 @@
 {
 	"ver": 0, 
-	"users": [{
-		"id": "None", 
-		"name": "None", 
-		"balance": 0
-	}]
+	"users": []
 }
