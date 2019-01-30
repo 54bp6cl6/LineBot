@@ -200,6 +200,7 @@ def handle_message(event):
                             line_bot_api.push_message(data["users"][i]["id"],TextSendMessage(
                                 text=data["users"][client_index]["name"]+"匯給你"+command[2]+"元"))
                             open_atm_ui(data,i)
+                            break
                     if not finded:
                         line_bot_api.push_message(event.source.user_id,
                                 TextSendMessage(text="找不到此匯款對象("+command[1]+")"))
