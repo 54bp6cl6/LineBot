@@ -260,7 +260,7 @@ def handle_follow(event):
 def handle_sticker_message(event):
     data = get_data()
     client_index = login(data,event.source.user_id)
-    if client_index < == -1:
+    if client_index == -1:
         line_bot_api.reply_message(event.reply_token, 
             TextSendMessage(text="初次使用需輸入姓名，請問您的名字是?"))
     else:
