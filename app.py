@@ -81,7 +81,7 @@ def restart():
 def open_atm_ui(data,client_index):
     URL = "line://app/1597095214-Y1BrG15q?p="
     for i in range(len(data["users"])):
-        if i != client_index:
+        if i != client_index and i > 0:
             if i >= len(data["users"]):
                 URL+=data["users"][i]["name"]
             else:
