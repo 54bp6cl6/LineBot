@@ -91,7 +91,7 @@ def open_atm_ui(data,client_index):
         TemplateSendMessage(
             alt_text='開啟ATM面板',
             template=ConfirmTemplate(
-                text="帳戶餘額："+str(data["users"][i]["balance"])+"元",
+                text="帳戶餘額："+str(data["users"][client_index]["balance"])+"元",
                 actions=[
                     URITemplateAction(
                         label='開啟',
@@ -190,8 +190,6 @@ def handle_message(event):
                                 data["users"][i]["balance"]+=money
                                 data["users"][client_index]["balance"]-=money
                                 data["ver"] += 1
-                                line_bot_api.push_message(event.source.user_id,TextSendMessage(
-                                    text="i="+str(i)+"money="+str(money)+"\n匯款人="+str(data["users"][client_index]["balance"])+"\n收款人="+str(data["users"][i]["balance"])))
                                 if check_data(data):
                                     write(data)
                                     break
