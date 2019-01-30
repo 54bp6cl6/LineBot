@@ -191,7 +191,7 @@ def handle_message(event):
                                 data["users"][client_index]["balance"]-=money
                                 data["ver"] += 1
                                 line_bot_api.push_message(event.source.user_id,TextSendMessage(
-                                    text="i="+str(i)+"money="+str(money)+"\n匯款人="+str(data["users"][client_index]["balance"]+"\n收款人="+str(data["users"][i]["balance"]))))
+                                    text="i="+str(i)+"money="+str(money)+"\n匯款人="+str(data["users"][client_index]["balance"])+"\n收款人="+str(data["users"][i]["balance"])))
                                 if check_data(data):
                                     write(data)
                                     break
