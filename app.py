@@ -81,7 +81,7 @@ def restart():
 def open_atm_ui(data,client_index):
     URL = "line://app/1597095214-Y1BrG15q?p="
     for i in range(len(data["users"])):
-        if i != client_index and i > 0:
+        if i != client_index:
             if i >= len(data["users"]):
                 URL+=data["users"][i]["name"]
             else:
@@ -190,6 +190,8 @@ def handle_message(event):
                                 data["users"][i]["balance"]+=money
                                 data["users"][client_index]["balance"]-=money
                                 data["ver"] += 1
+                                line_bot_api.push_message(event.source.user_id,TextSendMessage(
+                                    text="i="+str(i)+"money="+str(money)+"\n匯款人="+str(data["users"][client_index]["balance"]+"\n收款人="+str(data["users"][i]["balance"]))))
                                 if check_data(data):
                                     write(data)
                                     break
