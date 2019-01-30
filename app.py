@@ -240,6 +240,7 @@ def handle_postback(event):
                         break
                 #-------------
                 line_bot_api.reply_message(event.reply_token, TextSendMessage(text="註冊成功，努力成為大富翁吧!!"))
+                client_index = login(data,event.source.user_id)
                 open_atm_ui(data,client_index)
             elif command[1] == 'f':
                 line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請再次輸入您的姓名"))
