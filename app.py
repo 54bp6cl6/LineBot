@@ -195,7 +195,7 @@ def handle_message(event):
                                     break
                             #-------------
                             line_bot_api.push_message(event.source.user_id,
-                                TextSendMessage(text="你匯給"+command[1]+command[2]+"元"))
+                                TextSendMessage(text="你匯給"+data["users"][i]["name"]+command[2]+"元"))
                             open_atm_ui(data,client_index)
                             line_bot_api.push_message(data["users"][i]["id"],TextSendMessage(
                                 text=data["users"][client_index]["name"]+"匯給你"+command[2]+"元"))
